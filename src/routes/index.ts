@@ -1,8 +1,8 @@
 import { Express } from 'express-serve-static-core';
-import userRoutes from './userRoutes';
+import userRoute from './userRoute';
 
 function Routes(app: Express) {
-  app.use('/api', userRoutes);
+  userRoute(app);
 }
 
 export default Routes;
