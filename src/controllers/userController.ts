@@ -45,6 +45,51 @@ const get = async (req: Request, res: Response): Promise<Response> => {
   }
 }
 
+const post = async (req: Request, res: Response): Promise<Response> => {
+  try {
+
+    const {
+      nome,
+      email,
+      senha
+    } = req.body;
+
+    const verifyEmail = await User.findOne({
+      where: { email },
+    });
+    if(verifyEmail){
+      return res.status(400).send({
+        message: 'Email already registered',
+        data: [],
+      });
+    }
+
+    await User.create({
+      nome,
+      email,
+      senha,
+    });
+
+    return res.status(201).send({
+      message: 'User created',
+      data: {
+        nome,
+        email,
+      },
+    });
+
+  } catch (error) {
+    console.error('Error creating user:', error);
+    const errorMessage = (error as Error).message;
+
+    return res.status(500).send({
+      message: 'Oops! An error occurred.',
+      error: errorMessage,
+    });
+  }
+}
+
 export default {
   get,
+  post,
 }
